@@ -1,17 +1,36 @@
+
+import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from redis.exceptions import RedisError
 
 from src.core.config import settings
+from src.core.redis import connect_redis, close_redis
 from src.db.session import init_db
 from src.api import health, auth, users, titles, genres, platforms
+
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Create tables on startup (switch to Alembic migrations later)
+    # Initialize the database.
     await init_db()
-    yield
+
+    # Redis is optional: the API can run without caching.
+    try:
+        await connect_redis()
+    except (RedisError, OSError):
+        logger.warning(
+            "Redis is unavailable. Continuing without caching.",
+            exc_info=True,
+        )
+
+    try:
+        yield
+    finally:
+        await close_redis()
 
 
 app = FastAPI(
@@ -24,8 +43,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-
-# Register API routers
+# Register API routers.
 app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(users.router)
