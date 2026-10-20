@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     # --- Database (an async driver is required) ---
     # PostgreSQL: postgresql+asyncpg://user:password@localhost:5432/ott
     DATABASE_URL: str = "sqlite+aiosqlite:///./app.db"
+    REDIS_URL: str = "redis://localhost:6379/0"
+    REDIS_DEFAULT_TTL: int = 300
 
     model_config = SettingsConfigDict(
         env_file=".env",
