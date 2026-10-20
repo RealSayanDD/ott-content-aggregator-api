@@ -1,58 +1,78 @@
-import os
 
-from dotenv import load_dotenv
+import logging
+
 from redis.asyncio import Redis
+from redis.exceptions import RedisError
 
-load_dotenv()
+from src.core.config import settings
 
-REDIS_URL = os.getenv(
-    "REDIS_URL",
-    "redis://localhost:6379/0"
-)
+logger = logging.getLogger(__name__)
 
-REDIS_DEFAULT_TTL = int(
-    os.getenv("REDIS_DEFAULT_TTL", "300")
-)
-
+# Global Redis connection
 redis_client: Redis | None = None
 
 
 async def connect_redis() -> None:
+    """
+    Establish the Redis connection during application startup.
+
+    Raises:
+        RedisError: If Redis is unavailable.
+    """
     global redis_client
 
+    # Avoid creating multiple connections.
     if redis_client is not None:
         return
 
     client = Redis.from_url(
-        REDIS_URL,
+        settings.REDIS_URL,
         encoding="utf-8",
         decode_responses=True,
         socket_connect_timeout=5,
         socket_timeout=5,
+        health_check_interval=30,
     )
 
     try:
         await client.ping()
-    except Exception:
-        await client.aclose()
-        raise
 
-    redis_client = client
+        redis_client = client
+
+        logger.info("Redis connection established successfully.")
+
+    except RedisError:
+        await client.aclose()
+
+        logger.exception("Failed to connect to Redis.")
+
+        raise
 
 
 async def close_redis() -> None:
+    """
+    Close the Redis connection during application shutdown.
+    """
     global redis_client
 
     if redis_client is not None:
         await redis_client.aclose()
         redis_client = None
 
+        logger.info("Redis connection closed successfully.")
+
 
 def get_redis() -> Redis:
+    """
+    Return the active Redis client.
+
+    Raises:
+        RuntimeError: If Redis has not been initialized.
+    """
     if redis_client is None:
         raise RuntimeError(
             "Redis is not connected. "
-            "Initialize Redis during application startup."
+            "Call connect_redis() during application startup."
         )
 
     return redis_client
