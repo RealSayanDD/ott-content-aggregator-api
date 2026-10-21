@@ -1,16 +1,12 @@
-
 import logging
-
 from redis.asyncio import Redis
 from redis.exceptions import RedisError
-
 from src.core.config import settings
 
 logger = logging.getLogger(__name__)
 
 # Global Redis connection
 redis_client: Redis | None = None
-
 
 async def connect_redis() -> None:
     """
