@@ -8,13 +8,9 @@ logger = logging.getLogger(__name__)
 # Global Redis connection
 redis_client: Redis | None = None
 
+#Establishing the Redis
 async def connect_redis() -> None:
-    """
-    Establish the Redis connection during application startup.
-
-    Raises:
-        RedisError: If Redis is unavailable.
-    """
+    
     global redis_client
 
     # Avoid creating multiple connections.
@@ -44,11 +40,9 @@ async def connect_redis() -> None:
 
         raise
 
-
+#Closing the Redis connection during application shutdown.
 async def close_redis() -> None:
-    """
-    Close the Redis connection during application shutdown.
-    """
+
     global redis_client
 
     if redis_client is not None:
@@ -57,14 +51,9 @@ async def close_redis() -> None:
 
         logger.info("Redis connection closed successfully.")
 
-
+#Return the active Redis client.
 def get_redis() -> Redis:
-    """
-    Return the active Redis client.
-
-    Raises:
-        RuntimeError: If Redis has not been initialized.
-    """
+    
     if redis_client is None:
         raise RuntimeError(
             "Redis is not connected. "
