@@ -25,6 +25,10 @@ Instead of searching through multiple streaming platforms individually, the appl
 
 The project focuses on building a scalable REST API with efficient database management, secure authentication, structured data validation, and optimized response times through Redis caching.
 
+## Current implemented API
+
+The implementation now includes JWT authentication and profile management, administrator-managed titles/genres/platforms, public title discovery, private watchlists/favorites, Redis-backed title response caching, and `/health` plus `/ready` probes. See [the catalog API guide](docs/CATALOG_API.md) for the current routes, examples, assumptions, and run instructions. The older architectural sections below describe the project direction and should not be read as a guarantee that an external OTT provider integration exists.
+
 ### 🎯 Project Vision
 
 To develop an efficient OTT content aggregation system where:
