@@ -84,6 +84,29 @@ Content-Type: application/json
 {"is_favorite": true}
 ```
 
+## Provider availability
+
+Netflix, Prime Video, and JioHotstar are represented by ordinary `Platform` records. The API deliberately does not scrape their private services or impersonate provider APIs. An admin can add verified regional availability data from an approved provider feed or a licensed data source.
+
+| Method | Path | Access | Purpose |
+|---|---|---|---|
+| GET | `/api/titles/{title_id}/availability` | public | Current availability, optionally filtered by `country=IN` |
+| POST | `/api/titles/{title_id}/availability` | admin | Add a title/platform/country availability record |
+| DELETE | `/api/titles/{title_id}/availability/{availability_id}` | admin | Remove an availability record |
+
+```json
+{
+  "platform_id": 1,
+  "country_code": "IN",
+  "provider_content_id": "provider-owned-id",
+  "url": "https://provider.example/title",
+  "available_from": null,
+  "available_until": null
+}
+```
+
+To automate ingestion later, obtain a documented, licensed provider feed and add an integration adapter; do not use private application endpoints, user cookies, or scraping.
+
 ## Redis behavior
 
 The existing Redis helper remains optional: cache failures do not stop reads. Published title list and detail responses are cached under the `catalog:` namespace using the configured `REDIS_DEFAULT_TTL`. Title writes invalidate title-list keys and the changed detail key. Genre or platform writes invalidate both title-list and title-detail keys because those objects are embedded in title responses. Invalidation uses Redis `SCAN`, not blocking `KEYS`.

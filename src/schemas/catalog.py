@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator, model_validator
 
 from src.models.catalog import ContentType
 
@@ -133,3 +133,42 @@ class WatchlistEntryRead(BaseModel):
 class WatchlistPage(BaseModel):
     data: list[WatchlistEntryRead]
     meta: PageMeta
+
+
+class AvailabilityBase(BaseModel):
+    platform_id: int = Field(gt=0)
+    country_code: str = Field(min_length=2, max_length=2)
+    provider_content_id: str | None = Field(default=None, max_length=255)
+    url: HttpUrl
+    available_from: datetime | None = None
+    available_until: datetime | None = None
+
+    @field_validator("country_code")
+    @classmethod
+    def normalize_country(cls, value: str) -> str:
+        value = value.upper()
+        if not value.isalpha():
+            raise ValueError("country_code must be a two-letter ISO country code")
+        return value
+
+    @model_validator(mode="after")
+    def validate_window(self):
+        if self.available_from and self.available_until and self.available_until <= self.available_from:
+            raise ValueError("available_until must be after available_from")
+        return self
+
+
+class AvailabilityCreate(AvailabilityBase):
+    pass
+
+
+class AvailabilityRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    country_code: str
+    provider_content_id: str | None
+    url: HttpUrl
+    available_from: datetime | None
+    available_until: datetime | None
+    last_synced_at: datetime
+    platform: PlatformRead

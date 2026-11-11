@@ -1,4 +1,5 @@
 
+import asyncio
 import logging
 import time
 from contextlib import asynccontextmanager
@@ -9,9 +10,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from redis.exceptions import RedisError
 
 from src.core.config import settings
+from src.core.availability_scheduler import run_availability_scheduler
 from src.core.redis import connect_redis, close_redis
 from src.db.session import init_db
-from src.api import health, auth, users, titles, genres, platforms, watchlist
+from src.api import availability, health, auth, users, titles, genres, platforms, watchlist
 
 # Configure application logging.
 logging.basicConfig(
@@ -41,9 +43,17 @@ async def lifespan(app: FastAPI):
             exc_info=True,
         )
 
+    stop_event = asyncio.Event()
+    scheduler_task = None
+    if settings.ENABLE_AVAILABILITY_SCHEDULER:
+        scheduler_task = asyncio.create_task(run_availability_scheduler(stop_event))
+
     try:
         yield
     finally:
+        stop_event.set()
+        if scheduler_task is not None:
+            await scheduler_task
         try:
             await close_redis()
             logger.info("Redis connection closed.")
@@ -136,6 +146,7 @@ app.include_router(titles.router)
 app.include_router(genres.router)
 app.include_router(platforms.router)
 app.include_router(watchlist.router)
+app.include_router(availability.router)
 
 
 @app.get("/", tags=["General"])

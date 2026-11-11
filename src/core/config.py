@@ -20,6 +20,11 @@ class Settings(BaseSettings):
     REDIS_URL: str = "redis://localhost:6379/0"
     REDIS_DEFAULT_TTL: int = 300
 
+    # Availability maintenance is safe without any provider credentials. A real
+    # provider adapter must be enabled only after a licensed feed is available.
+    ENABLE_AVAILABILITY_SCHEDULER: bool = True
+    AVAILABILITY_SYNC_INTERVAL_MINUTES: int = 60
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

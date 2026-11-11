@@ -80,6 +80,43 @@ class Title(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
     genres: Mapped[list[Genre]] = relationship(secondary=title_genres, back_populates="titles", lazy="selectin")
     platforms: Mapped[list[Platform]] = relationship(secondary=title_platforms, back_populates="titles", lazy="selectin")
+    availability: Mapped[list["TitleAvailability"]] = relationship(
+        back_populates="title", cascade="all, delete-orphan", lazy="selectin"
+    )
+
+
+class TitleAvailability(Base):
+    """A verified regional availability record supplied by a provider or admin."""
+
+    __tablename__ = "title_availability"
+    __table_args__ = (
+        UniqueConstraint("title_id", "platform_id", "country_code", name="uq_title_platform_country"),
+    )
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    title_id: Mapped[int] = mapped_column(ForeignKey("titles.id", ondelete="CASCADE"), index=True)
+    platform_id: Mapped[int] = mapped_column(ForeignKey("platforms.id", ondelete="CASCADE"), index=True)
+    country_code: Mapped[str] = mapped_column(String(2), index=True)
+    provider_content_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    url: Mapped[str] = mapped_column(String(2048))
+    available_from: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    available_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_synced_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
+    title: Mapped[Title] = relationship(back_populates="availability")
+    platform: Mapped[Platform] = relationship(lazy="selectin")
+
+
+class AvailabilitySyncRun(Base):
+    """Audit record for scheduled availability maintenance."""
+
+    __tablename__ = "availability_sync_runs"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    status: Mapped[str] = mapped_column(String(20), default="running", index=True)
+    records_expired: Mapped[int] = mapped_column(Integer, default=0)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    error_message: Mapped[str | None] = mapped_column(String(500), nullable=True)
 
 
 class WatchlistEntry(Base):

@@ -79,3 +79,33 @@ async def test_catalog_validation_and_readiness(client, admin_token):
     ready = await client.get("/ready")
     assert ready.status_code == 200
     assert ready.json()["checks"]["database"] == "ok"
+
+
+async def test_title_provider_availability(client, admin_token):
+    header = auth_header(admin_token)
+    genre = await _genre(client, header)
+    platform = await _platform(client, header)
+    title = await _title(client, header, genre["id"], platform["id"])
+
+    created = await client.post(
+        f"/api/titles/{title['id']}/availability",
+        json={
+            "platform_id": platform["id"],
+            "country_code": "in",
+            "provider_content_id": "example-123",
+            "url": "https://example.test/watch/orbit",
+        },
+        headers=header,
+    )
+    assert created.status_code == 201, created.text
+    assert created.json()["country_code"] == "IN"
+
+    response = await client.get(f"/api/titles/{title['id']}/availability?country=IN")
+    assert response.status_code == 200
+    assert response.json()[0]["platform"]["slug"] == "example-stream"
+
+    deleted = await client.delete(
+        f"/api/titles/{title['id']}/availability/{created.json()['id']}",
+        headers=header,
+    )
+    assert deleted.status_code == 204
