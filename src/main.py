@@ -11,7 +11,7 @@ from redis.exceptions import RedisError
 from src.core.config import settings
 from src.core.redis import connect_redis, close_redis
 from src.db.session import init_db
-from src.api import health, auth, users, titles, genres, platforms
+from src.api import health, auth, users, titles, genres, platforms, watchlist
 
 # Configure application logging.
 logging.basicConfig(
