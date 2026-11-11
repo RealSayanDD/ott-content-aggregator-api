@@ -3,8 +3,9 @@ import logging
 from typing import Any
 
 from redis.exceptions import RedisError
-from src.core.redis import get_redis
+
 from src.core.config import settings
+from src.core.redis import get_redis
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +64,28 @@ async def delete_cache(key: str) -> bool:
         logger.warning(
             "Cache deletion failed for key: %s",
             key,
+            exc_info=True,
+        )
+        return False
+
+
+async def delete_cache_pattern(pattern: str) -> bool:
+    """Remove cached keys matching a namespace pattern safely."""
+    try:
+        redis = get_redis()
+        keys = [
+            key async for key in redis.scan_iter(match=pattern, count=100)
+        ]
+
+        if keys:
+            await redis.delete(*keys)
+
+        return True
+
+    except (RedisError, RuntimeError):
+        logger.warning(
+            "Cache invalidation failed for pattern: %s",
+            pattern,
             exc_info=True,
         )
         return False

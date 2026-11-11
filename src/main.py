@@ -135,6 +135,7 @@ app.include_router(users.router)
 app.include_router(titles.router)
 app.include_router(genres.router)
 app.include_router(platforms.router)
+app.include_router(watchlist.router)
 
 
 @app.get("/", tags=["General"])

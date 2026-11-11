@@ -1,4 +1,3 @@
-
 from collections.abc import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import (
@@ -31,8 +30,8 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
 
 async def init_db() -> None:
     """Create database tables for development."""
-    # Import all models so they register with Base.metadata.
-    from src.models import user, title, genre, platform  # noqa: F401
+    # Imports register every model with Base.metadata before table creation.
+    from src.models import catalog, user
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
