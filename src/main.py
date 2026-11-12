@@ -147,7 +147,10 @@ app.include_router(genres.router)
 app.include_router(platforms.router)
 app.include_router(watchlist.router)
 app.include_router(availability.router)
+<<<<<<< HEAD
 app.include_router(sync.router)
+=======
+>>>>>>> 1bcbadd82c111adbbcf28b5f690d1e797f587b42
 
 
 @app.get("/", tags=["General"])

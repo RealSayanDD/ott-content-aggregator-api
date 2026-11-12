@@ -107,6 +107,7 @@ Netflix, Prime Video, and JioHotstar are represented by ordinary `Platform` reco
 
 To automate ingestion later, obtain a documented, licensed provider feed and add an integration adapter; do not use private application endpoints, user cookies, or scraping.
 
+<<<<<<< HEAD
 ## Background provider sync
 
 `POST /api/admin/provider-sync` accepts an administrator JWT and queues a safe,
@@ -116,6 +117,8 @@ record without calling an external website. It demonstrates the asynchronous
 ingestion architecture required for the project; replace `MockProviderClient`
 with a licensed, documented provider-feed adapter before production use.
 
+=======
+>>>>>>> 1bcbadd82c111adbbcf28b5f690d1e797f587b42
 ## Redis behavior
 
 The existing Redis helper remains optional: cache failures do not stop reads. Published title list and detail responses are cached under the `catalog:` namespace using the configured `REDIS_DEFAULT_TTL`. Title writes invalidate title-list keys and the changed detail key. Genre or platform writes invalidate both title-list and title-detail keys because those objects are embedded in title responses. Invalidation uses Redis `SCAN`, not blocking `KEYS`.
