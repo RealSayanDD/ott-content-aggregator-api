@@ -1,8 +1,3 @@
-"""Safe, deterministic provider-ingestion example.
-
-Replace ``MockProviderClient`` with a licensed provider-feed adapter in a real
-deployment.  It intentionally does not scrape provider pages or use cookies.
-"""
 from datetime import datetime, timezone
 
 from sqlalchemy import select
