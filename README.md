@@ -1,618 +1,300 @@
-# 🎬 OTT Content Aggregator API
+<div align="center">
 
-<p align="center">
-  <strong>A centralized REST API for discovering and aggregating OTT content across multiple streaming platforms.</strong>
-  <br />
-  Explore movies, TV shows, genres, and streaming availability through a unified backend service.
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:09090b,45:7f1d1d,100:ea580c&height=230&section=header&text=OTT%20CONTENT%20AGGREGATOR&fontSize=38&fontColor=ffffff&fontAlignY=38&desc=DISCOVER%20%E2%80%A2%20EXPLORE%20%E2%80%A2%20ORGANIZE&descAlignY=60&descSize=15&animation=twinkling" width="100%" alt="OTT Content Aggregator animated cinematic banner" />
+
+<p>
+  <img src="https://readme-typing-svg.demolab.com?font=Space+Grotesk&weight=600&size=21&duration=2600&pause=900&color=F97316&center=true&vCenter=true&width=720&lines=One+API.+Multiple+streaming+platforms.;Discover+movies+and+TV+shows.;Built+with+FastAPI%2C+PostgreSQL+%26+Redis." alt="Animated project tagline" />
 </p>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
-  <img src="https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
-  <img src="https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/Redis-Caching-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis" />
-  <img src="https://img.shields.io/badge/SQLAlchemy-ORM-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white" alt="SQLAlchemy" />
-  <img src="https://img.shields.io/badge/Pydantic-Validation-E92063?style=for-the-badge&logo=pydantic&logoColor=white" alt="Pydantic" />
+<p>
+  <strong>A centralized REST API for discovering and managing OTT content.</strong><br/>
+  Explore titles, genres, streaming platforms, watchlists, and favorites through one backend service.
 </p>
 
----
+<p>
+  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+  <img src="https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
+  <img src="https://img.shields.io/badge/Redis-Caching-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis"/>
+</p>
+<p>
+  <img src="https://img.shields.io/badge/SQLAlchemy-ORM-D71F00?style=flat-square&logo=sqlalchemy&logoColor=white" alt="SQLAlchemy"/>
+  <img src="https://img.shields.io/badge/Pydantic-Validation-E92063?style=flat-square&logo=pydantic&logoColor=white" alt="Pydantic"/>
+  <img src="https://img.shields.io/badge/JWT-Authentication-black?style=flat-square&logo=jsonwebtokens" alt="JWT"/>
+  <img src="https://img.shields.io/badge/Pytest-Testing-0A9EDC?style=flat-square&logo=pytest&logoColor=white" alt="Pytest"/>
+</p>
 
-## 📌 Overview
-
-**OTT Content Aggregator API** is a collaborative backend development project designed to provide a centralized platform for discovering content available across different Over-The-Top (OTT) streaming services.
-
-Instead of searching through multiple streaming platforms individually, the application aims to provide a unified API through which users can explore movies, television shows, genres, and streaming platform information.
-
-The project focuses on building a scalable REST API with efficient database management, secure authentication, structured data validation, and optimized response times through Redis caching.
-
-## Current implemented API
-
-The implementation now includes JWT authentication and profile management, administrator-managed titles/genres/platforms, public title discovery, private watchlists/favorites, Redis-backed title response caching, and `/health` plus `/ready` probes. See [the catalog API guide](docs/CATALOG_API.md) for the current routes, examples, assumptions, and run instructions. The older architectural sections below describe the project direction and should not be read as a guarantee that an external OTT provider integration exists.
-
-### 🎯 Project Vision
-
-To develop an efficient OTT content aggregation system where:
-
-* Users can discover movies and television shows from different OTT platforms.
-* Content can be explored through categories, genres, and streaming platforms.
-* Authenticated users can access protected API functionality.
-* Database operations are handled efficiently using SQLAlchemy.
-* Frequently requested data can be served through Redis caching.
-* The backend follows a modular and scalable architecture.
-
-> **Development Approach:** The project is being developed collaboratively using FastAPI, PostgreSQL, SQLAlchemy, and Redis, with separate responsibilities for database management, authentication, and caching.
+</div>
 
 ---
 
-## ✨ Key Features
+## 🎬 The idea
 
-### 🎥 OTT Content Aggregation
+Finding something to watch shouldn't mean jumping between multiple streaming apps. **OTT Content Aggregator API** provides a unified backend for organizing and discovering movies and TV shows, with authentication, user collections, and caching built into the service.
 
-* Centralized content discovery through a REST API.
-* Structured representation of movies and television shows.
-* Support for organizing content by genres and streaming platforms.
-* Foundation for searching and filtering OTT content.
-* Unified API response structure.
+> **Project focus:** modular REST API development, relational data management, secure authentication, and faster repeated reads through Redis.
 
-### 🔐 Authentication & Authorization
+## ✨ What the API offers
 
-* User authentication using JWT.
-* Secure password hashing using Passlib.
-* Token-based authentication using `python-jose`.
-* Protected API endpoints.
-* Authentication-related request validation.
+<table>
+<tr>
+<td width="50%" valign="top">
 
-### ⚡ Redis Caching
+### 🎞️ Content discovery
+- Public title discovery endpoints
+- Organized genres and streaming platforms
+- Structured movie and TV-show records
+- Search and filtering foundation
 
-* Redis integration for high-performance data retrieval.
-* Caching frequently requested API responses.
-* Cache hit and cache miss handling.
-* Configurable cache expiration using TTL (Time To Live).
-* Reduced unnecessary database queries.
-* Cache invalidation to maintain data consistency.
-* Graceful handling of Redis availability issues.
+</td>
+<td width="50%" valign="top">
 
-### 🗄️ Database Management
+### 🔐 User accounts
+- JWT-based authentication
+- Password hashing
+- User profile management
+- Protected endpoints
 
-* PostgreSQL relational database integration.
-* SQLAlchemy 2.0 ORM for database operations.
-* Structured database models and relationships.
-* Database session management.
-* Alembic for database schema migrations.
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
 
-### 🛡️ API Validation
+### ❤️ Personal collections
+- Private watchlists
+- Favorites management
+- User-specific protected data
+- Consistent request validation
 
-* Pydantic v2 for request and response validation.
-* Structured API response models.
-* Input validation and error handling.
-* Consistent API data structures.
+</td>
+<td width="50%" valign="top">
 
-### 🧪 Testing
+### ⚡ Performance & operations
+- Redis-backed title response caching
+- Cache expiration and invalidation
+- `/health` and `/ready` probes
+- PostgreSQL persistence through SQLAlchemy
 
-* Pytest-based testing framework.
-* HTTPX for API endpoint testing.
-* Foundation for testing authentication, database operations, and caching functionality.
+</td>
+</tr>
+</table>
 
----
+## 🧭 How a request travels
 
-## 🧰 Technology Stack
-
-| Technology | Purpose |
-|---|---|
-| Python 3.10+ | Backend programming language |
-| FastAPI | REST API development |
-| PostgreSQL | Relational database |
-| SQLAlchemy 2.0 | Object Relational Mapping (ORM) |
-| Pydantic v2 | Request and response validation |
-| Redis | In-memory caching |
-| python-jose | JWT authentication |
-| Passlib | Password hashing |
-| Alembic | Database migrations |
-| Pytest | Automated testing |
-| HTTPX | HTTP client and API testing |
-| Uvicorn | ASGI application server |
-
----
-
-## 🏗️ Application Architecture
-
-The application follows a modular backend architecture that separates API routing, business logic, database operations, authentication, and caching.
-
-### Request Processing Flow
-
-```text
-                 Client Request
-                       |
-                       v
-                FastAPI Application
-                       |
-                       v
-                 API Endpoint
-                       |
-                       v
-                Business Logic
-                       |
-                       v
-                Redis Cache Check
-                       |
-              +--------+--------+
-              |                 |
-              v                 v
-          Cache Hit         Cache Miss
-              |                 |
-              v                 v
-        Return Cached      Query PostgreSQL
-             Data                |
-                                 v
-                          Retrieve Data
-                                 |
-                                 v
-                          Store in Redis
-                                 |
-                                 v
-                          Return API Response
+```mermaid
+flowchart TD
+    A["🌐 Client"] --> B["⚡ FastAPI"]
+    B --> C["🧩 API Router"]
+    C --> D["🔐 Authentication / Validation"]
+    D --> E{"Redis cache"}
+    E -- "Cache hit" --> F["📦 Cached response"]
+    E -- "Cache miss" --> G["🗄️ PostgreSQL"]
+    G --> H["🧱 SQLAlchemy ORM"]
+    H --> I["♻️ Store cache entry"]
+    I --> J["📤 API response"]
+    F --> J
 ```
 
-### Core Components
+The exact path depends on the endpoint. Public discovery requests can use the caching layer; protected user operations also pass through authentication and authorization checks.
 
-| Component | Responsibility |
+## 🧰 Technology stack
+
+| Technology | Role |
 |---|---|
-| FastAPI | Handles incoming HTTP requests and API routing |
-| PostgreSQL | Stores application data |
-| SQLAlchemy | Manages database interactions |
-| Pydantic | Validates incoming and outgoing data |
-| Redis | Stores frequently accessed data temporarily |
-| JWT | Provides token-based authentication |
-| Alembic | Manages database schema migrations |
-| Pytest | Tests application functionality |
+| **Python 3.10+** | Backend language |
+| **FastAPI** | REST API framework |
+| **PostgreSQL** | Relational database |
+| **SQLAlchemy 2.0** | ORM and database access |
+| **Pydantic v2** | Request and response validation |
+| **Redis** | Frequently accessed response cache |
+| **python-jose / JWT** | Token-based authentication |
+| **Passlib** | Password hashing |
+| **Alembic** | Database migrations |
+| **Pytest + HTTPX** | API testing |
+| **Uvicorn** | ASGI server |
 
----
-
-## 📂 Project Structure
-
-The following represents a suggested modular structure. Adjust the filenames and directories to match the actual repository.
-
-```text
-ott-aggregator-api/
-│
-├── app/
-│   │
-│   ├── main.py
-│   │
-│   ├── api/
-│   │   └── routes/
-│   │
-│   ├── core/
-│   │   ├── config.py
-│   │   └── security.py
-│   │
-│   ├── database/
-│   │   ├── connection.py
-│   │   └── models.py
-│   │
-│   ├── schemas/
-│   │
-│   ├── services/
-│   │
-│   ├── cache/
-│   │   ├── redis.py
-│   │   └── cache.py
-│   │
-│   └── utils/
-│
-├── alembic/
-│
-├── tests/
-│
-├── .env.example
-├── .gitignore
-├── alembic.ini
-├── requirements.txt
-└── README.md
-```
-
-### Core Modules
-
-| Module | Responsibility |
-|---|---|
-| `main.py` | FastAPI application entry point |
-| `api/routes/` | API endpoint definitions |
-| `core/config.py` | Application configuration |
-| `core/security.py` | Authentication and security utilities |
-| `database/` | Database connection and ORM models |
-| `schemas/` | Pydantic request and response schemas |
-| `services/` | Application business logic |
-| `cache/redis.py` | Redis connection management |
-| `cache/cache.py` | Reusable caching operations |
-| `alembic/` | Database migration management |
-| `tests/` | Automated application tests |
-
-*Note: The directory structure is illustrative and should be synchronized with the actual implementation.*
-
----
-
-## ⚙️ Getting Started
-
-Follow these instructions to set up the project locally.
+## 🚀 Run it locally
 
 ### Prerequisites
 
-Make sure you have the following installed:
+- Python 3.10 or newer
+- PostgreSQL
+- Redis
+- Git
 
-* Python 3.10 or above
-* PostgreSQL
-* Redis
-* Git
-* Visual Studio Code or another code editor
-
-Verify your installation:
-
-```bash
-python --version
-pip --version
-git --version
-```
-
-Verify Redis is running:
-
-```bash
-redis-cli ping
-```
-
-Expected response:
-
-```text
-PONG
-```
-
-### 1. Clone the Repository
+### 1. Clone the repository
 
 ```bash
 git clone <YOUR_GITHUB_REPOSITORY_URL>
-```
-
-### 2. Navigate to the Project
-
-```bash
 cd ott-aggregator-api
 ```
 
-### 3. Create a Virtual Environment
+### 2. Create and activate a virtual environment
 
 ```bash
 python -m venv venv
-```
 
-Activate the environment.
-
-**Windows:**
-
-```bash
-venv\Scripts\activate
-```
-
-**Linux / macOS:**
-
-```bash
+# macOS / Linux
 source venv/bin/activate
+
+# Windows
+# venv\Scripts\activate
 ```
 
-### 4. Install Dependencies
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 5. Configure Environment Variables
+### 4. Configure environment variables
 
-Create a `.env` file in the project root.
-
-Configure the required PostgreSQL connection, Redis connection, JWT secret, and other application settings according to the project's configuration.
-
-Example configuration:
+Create a `.env` file in the project root and add the values required by your application configuration.
 
 ```env
 DATABASE_URL=<YOUR_POSTGRESQL_CONNECTION_STRING>
-
 REDIS_URL=redis://localhost:6379/0
-
 SECRET_KEY=<YOUR_SECRET_KEY>
 ```
 
-*Use the actual environment variable names expected by the application. Never commit your `.env` file.*
+Use the exact variable names expected by the project's settings. Keep `.env` private and never commit secrets.
 
-### 6. Run Database Migrations
-
-Apply the existing Alembic migrations:
+### 5. Apply database migrations
 
 ```bash
 alembic upgrade head
 ```
 
-### 7. Start Redis
+### 6. Start Redis and launch the API
 
-Make sure the Redis server is running locally.
-
-```bash
-redis-server
-```
-
-### 8. Start the FastAPI Server
-
-For an application whose entry point is `app/main.py`:
+Make sure your Redis server and PostgreSQL service are running. Then start the application using the entry point configured in your repository. For an `app/main.py` entry point:
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-### 9. Access API Documentation
+### 7. Open the API documentation
 
-Once the server starts, access the interactive API documentation:
-
-**Swagger UI:**
-
-```text
-http://127.0.0.1:8000/docs
-```
-
-**ReDoc:**
-
-```text
-http://127.0.0.1:8000/redoc
-```
-
-*Note: Adjust the Uvicorn import path and setup commands if the repository uses a different application entry point.*
-
----
-
-## ⚡ Redis Caching Architecture
-
-Redis is integrated into the application to improve API performance by reducing repeated database queries.
-
-### How Caching Works
-
-1. A client sends a request to an API endpoint.
-2. The application checks whether the requested data exists in Redis.
-3. If the data exists (Cache Hit), the cached result is returned.
-4. If the data does not exist (Cache Miss), the application queries PostgreSQL.
-5. The retrieved result is stored in Redis with an expiration time.
-6. Subsequent requests can retrieve the result directly from Redis.
-
-### Caching Benefits
-
-* Faster API response times for frequently accessed data.
-* Reduced PostgreSQL database workload.
-* Improved application scalability.
-* Efficient utilization of database resources.
-* Automatic cache expiration through TTL.
-
-### Cache Management
-
-The caching layer is designed around three fundamental operations:
-
-| Operation | Description |
+| Resource | Local URL |
 |---|---|
-| GET | Retrieve cached data |
-| SET | Store data with an expiration time |
-| DELETE | Invalidate cached data |
+| Swagger UI | http://127.0.0.1:8000/docs |
+| ReDoc | http://127.0.0.1:8000/redoc |
 
-> **Important:** Cache invalidation is essential whenever underlying database records are modified. It prevents outdated cached responses from being served to clients.
+*If your repository uses a different Uvicorn import path or migration setup, use the commands defined by that implementation.*
 
----
+## ⚡ Why Redis?
 
-## 🔐 Security Considerations
+For frequently requested title data, the cache can avoid repeating the same database read on every request.
 
-Security is an important aspect of the backend architecture.
+```mermaid
+flowchart LR
+    A["Request"] --> B{"Cached?"}
+    B -- "Yes · HIT" --> C["Return cached data"]
+    B -- "No · MISS" --> D["Query PostgreSQL"]
+    D --> E["Save with TTL"]
+    E --> F["Return data"]
+```
 
-The application incorporates or is designed around the following security mechanisms:
+- **GET** — retrieve a cached response.
+- **SET** — store a response with an expiry time (TTL).
+- **DELETE** — invalidate a cached entry when underlying data changes.
 
-* JWT-based authentication.
-* Secure password hashing.
-* Protected API endpoints.
-* Pydantic-based input validation.
-* Environment-based secret management.
-* Database connection security.
-* Proper authentication and authorization checks.
-* Secure handling of Redis connection credentials.
+Cache invalidation matters: when a title is changed, related cached data should not remain stale.
 
-> **Important:** Sensitive credentials, JWT secrets, and database passwords must never be committed to the public repository.
+## 🛡️ Security
 
----
+- JWT-based authentication for protected routes
+- Password hashing rather than storing plain-text passwords
+- Request validation with Pydantic
+- Environment-based configuration for secrets
+- Authorization checks for user-specific resources
+
+Never publish database credentials, secret keys, access tokens, or `.env` files.
+
+## 🩺 Health checks
+
+The service includes operational probes:
+
+- `/health` — health endpoint
+- `/ready` — readiness endpoint
+
+Use these endpoints to check service health and readiness during local development or deployment.
 
 ## 🧪 Testing
 
-The project uses Pytest and HTTPX for automated testing.
-
-Run the test suite using:
+The project uses Pytest and HTTPX as its testing tools.
 
 ```bash
 pytest
 ```
 
-Run tests with detailed output:
+For verbose output:
 
 ```bash
 pytest -v
 ```
 
-Testing areas include:
+Useful areas to cover include authentication, protected routes, title discovery, database operations, cache behavior, validation, and error handling.
 
-* API endpoint functionality.
-* Request and response validation.
-* Authentication and authorization.
-* Database operations.
-* Redis caching operations.
-* Cache hit and cache miss scenarios.
-* Error handling.
+## 🗺️ Development status
 
----
+The implementation summary below reflects the current project description. Check the route documentation and codebase for the precise request/response schema of each endpoint.
 
-## 🔭 Development Roadmap
+| Area | Current status |
+|---|---|
+| JWT authentication | Implemented |
+| User profile management | Implemented |
+| Admin-managed titles, genres & platforms | Implemented |
+| Public title discovery | Implemented |
+| Private watchlists & favorites | Implemented |
+| Redis-backed title response caching | Implemented |
+| `/health` and `/ready` probes | Implemented |
+| External provider integrations | Not claimed by this project description |
 
-The project is being developed incrementally, with different modules implemented collaboratively.
+### Next improvements
 
-### Phase 1 — Project Foundation
-
-- [x] Python backend setup
-- [x] FastAPI integration
-- [x] PostgreSQL technology selection
-- [x] SQLAlchemy 2.0 integration
-- [x] Pydantic v2 integration
-
-### Phase 2 — Database Management
-
-- [ ] Database model implementation
-- [ ] Database relationship management
-- [ ] Database session management
-- [ ] Alembic migration integration
-- [ ] Database testing
-
-### Phase 3 — Authentication & Authorization
-
-- [ ] JWT authentication
-- [ ] Password hashing with Passlib
-- [ ] User registration and login
-- [ ] Protected API endpoints
-- [ ] Authentication testing
-
-### Phase 4 — Redis Caching
-
-- [ ] Redis connection configuration
-- [ ] Reusable caching utility functions
-- [ ] Cache GET, SET, and DELETE operations
-- [ ] TTL-based cache expiration
-- [ ] API endpoint caching integration
-- [ ] Cache invalidation
-- [ ] Redis failure handling
-- [ ] Cache performance testing
-
-### Phase 5 — OTT Content Aggregation
-
-- [ ] Content aggregation functionality
-- [ ] Movie and TV show management
-- [ ] Genre-based content organization
-- [ ] Streaming platform integration
-- [ ] Search and filtering functionality
-- [ ] API response optimization
-
-### Phase 6 — Testing & Production Readiness
-
-- [ ] Automated API testing
-- [ ] Database testing
-- [ ] Authentication testing
-- [ ] Redis caching testing
-- [ ] Error handling and logging
-- [ ] Performance optimization
-- [ ] Security testing
-- [ ] Deployment and monitoring
-
-*Roadmap checkboxes should be updated according to actual implementation progress.*
-
----
+- Expand automated endpoint and integration test coverage
+- Improve API logging and monitoring
+- Continue performance and cache-behavior testing
+- Add external streaming-provider integrations when credentials, APIs, and requirements are available
 
 ## 🤝 Contributing
 
-This project is being developed collaboratively as part of a Python Development Internship.
-
-Team members work on different modules while maintaining a common codebase and development workflow.
-
-### Development Workflow
-
-**1. Get the latest main branch**
+Contributions should keep the code modular, tested, and consistent with the existing project structure.
 
 ```bash
+# Start from the latest main branch
 git checkout main
 git pull origin main
-```
 
-**2. Create or switch to your feature branch**
-
-```bash
+# Create a feature branch
 git checkout -b feature/your-feature-name
-```
 
-**3. Make your changes and test locally**
-
-```bash
+# Run tests before committing
 pytest -v
-```
 
-**4. Stage and commit your changes**
-
-```bash
+# Commit and push your work
 git add .
-git commit -m "Add your feature description"
-```
-
-**5. Push your feature branch**
-
-```bash
+git commit -m "Describe your change"
 git push origin feature/your-feature-name
 ```
 
-**6. Create a Pull Request**
+Then open a Pull Request against `main`, describing the change and the tests performed.
 
-* Base branch: `main`
-* Compare branch: Your feature branch
-* Provide a descriptive title and summary.
-* Review the changes before merging.
+## 📚 API documentation
 
-### Contribution Guidelines
-
-* Keep code modular and organized.
-* Follow Python coding conventions.
-* Write reusable functions wherever possible.
-* Test changes before submitting a pull request.
-* Avoid committing unnecessary files.
-* Resolve merge conflicts carefully.
-* Never commit API keys, passwords, or environment files.
+For the latest implemented routes, examples, assumptions, and run instructions, see **[the Catalog API guide](docs/CATALOG_API.md)**.
 
 ---
 
-## 👥 Team Development
+<div align="center">
 
-The OTT Content Aggregator API is a collaborative internship project involving multiple contributors.
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:ea580c,55:7f1d1d,100:09090b&height=130&section=footer&animation=twinkling" width="100%" alt="Animated cinematic footer"/>
 
-The development responsibilities are divided across different technical areas:
+**OTT Content Aggregator API**
 
-| Responsibility | Focus Area |
-|---|---|
-| Database Development | PostgreSQL and SQLAlchemy |
-| Authentication | JWT authentication and password security |
-| Caching | Redis integration and API performance optimization |
+*One destination for discovering what to watch.*
 
-Each module contributes to building a unified, efficient, and maintainable backend application.
+<sub>Built with Python · FastAPI · PostgreSQL · Redis</sub>
 
----
-
-## 📌 Current Project Direction
-
-```text
-FastAPI Application Setup
-          |
-          v
-Database Integration
-          |
-          v
-Authentication & Authorization
-          |
-          v
-Redis Caching Integration
-          |
-          v
-OTT Content Aggregation
-          |
-          v
-API Testing & Optimization
-          |
-          v
-Production-Ready Backend API
-```
-
----
-
-<p align="center">
-  <strong>OTT Content Aggregator API</strong>
-  <br />
-  Building a unified OTT discovery experience through efficient backend engineering.
-</p>
+</div>
