@@ -1,0 +1,17 @@
+from pydantic import BaseModel, ConfigDict, Field
+from typing import Literal
+
+
+class ContentCreate(BaseModel):
+    title: str = Field(min_length=1, max_length=200)
+    content_type: Literal["movie", "show"]
+    genre: str = Field(min_length=1, max_length=100)
+    platform: str = Field(min_length=1, max_length=100)
+    release_year: int | None = Field(default=None, ge=1888, le=2100)
+    description: str | None = None
+
+
+class ContentResponse(ContentCreate):
+    id: int
+
+    model_config = ConfigDict(from_attributes=True)
